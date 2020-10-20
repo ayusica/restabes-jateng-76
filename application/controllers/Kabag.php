@@ -220,7 +220,7 @@ class Kabag extends CI_Controller
             if ($this->upload->do_upload('image')) {
                 $old_image = $user['foto'];
                 if ($old_image != 'default.png') {
-                    unlink(FCPATH . 'assets/img/g_instansi/' . $old_image);
+                    $this->file->rm(FCPATH . 'assets/img/g_instansi/' . $old_image);
                 }
                 $new_image = $this->upload->data('file_name');
                 $this->db->set('foto', $new_image);
