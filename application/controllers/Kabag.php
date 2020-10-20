@@ -205,8 +205,9 @@ class Kabag extends CI_Controller
     public function update_instansi()
     {
         $id_instansi = $this->input->post('instansi_hid', true);
-
-        $upload_image = $_FILES['image']['name'];
+        
+        $files = $this->request->getFiles()->toArray();
+        $upload_image = $files['image']['name'];
 
         if ($upload_image) {
             $config['allowed_types'] = 'gif|jpg|png';
