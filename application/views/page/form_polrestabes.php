@@ -43,7 +43,7 @@
       <!--Muncul pesan error upload-->
       <div style='color: red;'><?= filter_var($upload_error, FILTER_DEFAULT) ?></div>
     <?php
-      die; // stop skrip
+      die(); // stop skrip
     } ?>
 
     <!-- Buat sebuah tag form untuk proses import data ke database -->
