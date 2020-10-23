@@ -29,16 +29,16 @@
                         <?php $no = 1;
                         foreach ($personel as $personel) : ?>
                             <tr style="text-transform: uppercase;">
-                                <td><?php echo $no;
+                                <td><?= filter_var($no, FILTER_DEFAULT);
                                     $no++ ?></td>
-                                <td><?= $personel['nama']; ?></td>
-                                <td><?= $personel['nrp']; ?></td>
-                                <td><?= $personel['jabatan']; ?></td>
-                                <td><?= $personel['nama_instansi'] ?></td>
-                                <td><?= $personel['level']; ?></td>
+                                <td><?= filter_var($personel['nama'], FILTER_DEFAULT); ?></td>
+                                <td><?= filter_var($personel['nrp'], FILTER_DEFAULT); ?></td>
+                                <td><?= filter_var($personel['jabatan'], FILTER_DEFAULT); ?></td>
+                                <td><?= filter_var($personel['nama_instansi'], FILTER_DEFAULT) ?></td>
+                                <td><?= filter_var($personel['level'], FILTER_DEFAULT); ?></td>
                                 <td width="60px">
-                                    <button type="submit" class="badge btn-success" id="edit" onclick="edit('<?= $personel['nrp']; ?>')"><i class="fas fa-edit"></i></button>
-                                    <button type="submit" class="badge btn-danger" id="hapus" onclick="hapusAdmin('<?= $personel['nrp']; ?>')"><i class="fas fa-trash"></i></button>
+                                    <button type="submit" class="badge btn-success" id="edit" onclick="edit('<?= filter_var($personel['nrp'], FILTER_DEFAULT); ?>')"><i class="fas fa-edit"></i></button>
+                                    <button type="submit" class="badge btn-danger" id="hapus" onclick="hapusAdmin('<?= filter_var($personel['nrp'], FILTER_DEFAULT); ?>')"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -130,7 +130,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button id="save" type="button" class="btn btn-success" data-dismiss="modal" onclick="changepassword()">Simpan</button>
+                    <button id="save" type="button" class="btn btn-success" data-dismiss="modal" onclick="changePassword()">Simpan</button>
                 </div>
             </div>
         </div>
@@ -193,7 +193,7 @@
                         </div>
                         <div class="modal-footer">
                             <div class="col-auto mt-10">
-                                <button type="submit" class="btn btn-success" id="tambahAA" name="update" onclick="success_tambahAdmin()">Simpan</button>
+                                <button type="submit" class="btn btn-success" id="tambahAA" name="update" onclick="successTambahAdmin()">Simpan</button>
                             </div>
                         </div>
                     </form>
