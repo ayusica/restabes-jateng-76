@@ -29,83 +29,82 @@ class Urmin extends CI_Controller
      * tanggal: 27 Januari 2020
      * -----------------------------------------------------*/
 
-    public function personel_polrestabes()
+    public function personelPolrestabes()
     {
-        if ($this->session->userdata('akses') == 'kaurmin') {
-            $data['judul'] = "Personel Polrestabes Semarang";
-
-            //load model
-            $data['personel'] = $this->Urmin_model->polrestabes_personel();
-
-            $data['instansi'] = $this->Instansi_model->daftar_instansi();
-
-            $data['bagian'] = $this->Instansi_model->unsur_bagian();
-
-            $this->load->view('templates/user/header_user', $data);
-            $this->load->view('templates/user/sidebar', $data);
-            $this->load->view('templates/user/topbar', $data);
-            $this->load->view('page/personel_polrestabes', $data);
-            $this->load->view('templates/user/footer');
-        } else {
-            "Anda tidak berhak mengakses halaman ini!";
+        if ($this->session->userdata('akses') !== 'kaurmin') {
+            return $this->output->set_output("Anda tidak berhak mengakses halaman ini!");
         }
+        $data['judul'] = "Personel Polrestabes Semarang";
+
+        //load model
+        $data['personel'] = $this->Urmin_model->polrestabes_personel();
+
+        $data['instansi'] = $this->Instansi_model->daftar_instansi();
+
+        $data['bagian'] = $this->Instansi_model->unsur_bagian();
+
+        $this->load->view('templates/user/header_user', $data);
+        $this->load->view('templates/user/sidebar', $data);
+        $this->load->view('templates/user/topbar', $data);
+        $this->load->view('page/personel_polrestabes', $data);
+        $this->load->view('templates/user/footer');
     }
 
-    public function tambah_Poltabes()
+    public function tambahPoltabes()
     {
         $nrp = $this->input->post('nrp', true);
-        $level = 'personel';
+        // $level = 'personel';
         $personel = $this->Personel_model->detailitu($nrp);
 
         if ($personel) {
-            echo json_encode('sudah');
-        } else {
-            $this->Urmin_model->tambah_personel_polrestabes();
-            echo json_encode('sukses');
+            return $this->output->set_output(json_encode('sudah'));
         }
+        $this->Urmin_model->tambah_personel_polrestabes();
+        return $this->output->set_output(json_encode('sukses'));
     }
 
-    public function detail_poltabes($nrp)
+    public function detailPoltabes($nrp)
     {
         $data = $this->Personel_model->geteditPersonel($nrp);
 
-        echo json_encode($data);
+        return $this->output->set_output(json_encode($data));
     }
 
     //untuk hapus data personel poltabes
-    public function hapus_Pol()
+    public function hapusPol()
     {
         if ($this->session->userdata('akses') != 'personel') {
             $this->Urmin_model->hapusAja();
 
-            echo json_encode('success');
-        } else {
-            echo "Anda tidak berhak mengakses halaman ini";
+            return $this->output->set_output(json_encode('success'));
         }
+        return $this->output->set_output("Anda tidak berhak mengakses halaman ini");
     }
 
     //update data poltabes
-    public function update_Poltabes()
+    public function updatePoltabes()
     {
-        $data = $this->Urmin_model->update_PolPersonel();
+        $this->load->model('Urmin_model');
+        $this->Urmin_model->update_PolPersonel();
 
-        echo json_encode('success');
+        return $this->output->set_output(json_encode('success'));
     }
 
     //ganti password
-    public function ganti_Password()
+    public function gantiPassword()
     {
         $this->load->model('Kabag_model');
-        $data = $this->Kabag_model->ubahPassAdmin();
-        echo json_encode('success');
+        $this->Kabag_model->ubahPassAdmin();
+
+        return $this->output->set_output(json_encode('success'));
     }
 
     //impor data dari excel ke sistem
-    public function form_polrestabes()
+    public function formPolrestabes()
     {
         $data = array(); // Buat variabel $data sebagai array
 
-        if (isset($_POST['preview'])) { // Jika user menekan tombol Preview pada form
+        if (FILTER_INPUT(INPUT_POST, 'preview')) { // Jika user menekan tombol Preview pada form
             // lakukan upload file dengan memanggil function upload
             $this->load->model('Excel_model');
             $upload = $this->Excel_model->upload_file($this->filename);
@@ -172,11 +171,11 @@ class Urmin extends CI_Controller
         $this->load->model('Excel_model');
         $this->Excel_model->insert_multiple($data);
 
-        redirect("urmin/personel_polrestabes"); // Redirect ke halaman awal
+        redirect("urmin/personelPolrestabes"); // Redirect ke halaman awal
     }
 
     //download data pdf perbagian
-    public function pdf_bagian($id_bagian)
+    public function pdfBagian($id_bagian)
     {
         require_once APPPATH . 'third_party/dompdf/dompdf_config.inc.php';
 
@@ -194,11 +193,11 @@ class Urmin extends CI_Controller
 
         $dompdf->render();
 
-        $pdf = $dompdf->output();
+        // $pdf = $dompdf->output();
 
         $dompdf->stream("Data Personel Polrestabes Semarang.pdf", array('Attachment' => 0));
 
-        echo json_encode($data);
+        return $this->output->set_output(json_encode($data));
     }
 
     //select bagian
@@ -206,7 +205,7 @@ class Urmin extends CI_Controller
     {
         $data = $this->Instansi_model->unsur_bagian();
 
-        echo json_encode($data);
+        return $this->output->set_output(json_encode($data));
     }
 
     // hasil personel per instansi
@@ -214,6 +213,6 @@ class Urmin extends CI_Controller
     {
         $data = $this->Urmin_model->getPersonelBagian($id_bagian);
 
-        echo json_encode($data);
+        return $this->output->set_output(json_encode($data));
     }
 }
