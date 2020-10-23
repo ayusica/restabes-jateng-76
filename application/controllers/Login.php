@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or $this->getResponse()->setBody('No direct script access allowed');
 
 class Login extends CI_Controller
 {
@@ -22,9 +22,8 @@ class Login extends CI_Controller
         if ($this->session->userdata('masuk') == TRUE) {
             if ($this->session->userdata('akses') == 'kabag') {
                 redirect('kabag/dashboard');
-            } else {
-                redirect('personel/profil');
             }
+            redirect('personel/profil');
         } else {
             $data['judul'] = 'Halaman Masuk';
 
@@ -68,10 +67,10 @@ class Login extends CI_Controller
                     redirect('personel/profil');
                 }
             } else {
-                echo $this->session->set_flashdata('msg', '<div class="text text-warning" role="alert"><small>Password Salah!</small></div>');
+                $this->session->set_flashdata('msg', '<div class="text text-warning" role="alert"><small>Password Salah!</small></div>');
             }
         } else {
-            echo $this->session->set_flashdata('msg', '<div class="text text-warning" role="alert"><small>NRP Belum Terdaftar!</small></div>');
+            $this->session->set_flashdata('msg', '<div class="text text-warning" role="alert"><small>NRP Belum Terdaftar!</small></div>');
         }
         redirect('login/index');
     }
@@ -86,7 +85,7 @@ class Login extends CI_Controller
     public function logout()
     {
         $this->session->sess_destroy();
-        $url = base_url('');
+        $url = base_url("");
         redirect($url);
     }
 }
