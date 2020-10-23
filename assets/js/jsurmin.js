@@ -1,4 +1,4 @@
-var url_urmin = "http://localhost/restabes-jateng/urmin/";
+var urlUrmin = "http://localhost/restabes-jateng/urmin/";
 
 $("document").ready(function () {
 	$("#tambah_personel_button").click(function () {
@@ -11,18 +11,18 @@ $("document").ready(function () {
 	});
 
 	$.ajax({
-		url: url_urmin + "selectBagian",
+		url: urlUrmin + "selectBagian",
 		type: "GET",
 		dataType: "JSON",
 		success: function (data) {
 			var bag = "";
-			bag += '<option value="0">' + "SEMUA</option>";
+			bag += "<option value='0'>" + "SEMUA</option>";
 			for (var i = 0; i < 19; i++) {
 				bag +=
-					'<option value="' +
-					data[i]["id_bagian"] +
-					'">' +
-					data[i]["nama_bagian"] +
+					"<option value='" +
+					data[parseInt(i)]["id_bagian"] +
+					"'>" +
+					data[parseInt(i)]["nama_bagian"] +
 					"</option>";
 			}
 			$("#selectBagian").html(bag);
@@ -32,18 +32,15 @@ $("document").ready(function () {
 
 	$("#pdf_bagian").click(function () {
 		$.ajax({
-			url: url_urmin + "getPersonelBagian/" + $("#selectBagian").val(),
+			url: urlUrmin + "getPersonelBagian/" + $("#selectBagian").val(),
 			type: "GET",
 			dataType: "JSON",
 			success: function (data) {
 				if (data) {
 					window.open(
-						"http://localhost/restabes-jateng/urmin/pdf_bagian/" +
+						"http://localhost/restabes-jateng/urmin/pdfBagian/" +
 						$("#selectBagian").val(), "_blank"
 					);
-					// window.location.href =
-					// 	"http://localhost/restabes-jateng/urmin/pdf_bagian/" +
-					// 	$("#selectBagian").val();
 				} else {
 					alert("maaf");
 				}
@@ -58,7 +55,7 @@ $("document").ready(function () {
 //urmin
 function poltabes() {
 	$.ajax({
-		url: url_urmin + "tambah_Poltabes",
+		url: urlUrmin + "tambahPoltabes",
 		type: "POST",
 		dataType: "JSON",
 		data: {
@@ -67,14 +64,14 @@ function poltabes() {
 			pkt: $("#pkt_poltabes").val(),
 			jabatan: $("#jab_poltabes").val(),
 			tempat: $("#tmpt_lahir_poltabes").val(),
-			tgl_lahir: $("#tgl_lahir_poltabes").val(),
+			tglLahir: $("#tgl_lahir_poltabes").val(),
 			agama: $("#agama_poltabes").val(),
 			suku: $("#suku_poltabes").val(),
-			id_bagian: $("#bagian_poltabes").val(),
-			tmt_jab: $("#tmt_jab_poltabes").val()
+			idBagian: $("#bagian_poltabes").val(),
+			tmtJab: $("#tmt_jab_poltabes").val()
 		},
 		success: function (respon) {
-			if (respon == "sudah") {
+			if (respon === "sudah") {
 				alert("Data Personel Sudah Terekam!");
 			} else {
 				alert("Data Berhasil Terekam!");
@@ -88,7 +85,7 @@ function poltabes() {
 
 function detailPoltabes(nrp) {
 	$.ajax({
-		url: url_urmin + "detail_poltabes/" + nrp,
+		url: urlUrmin + "detailPoltabes/" + nrp,
 		type: "GET",
 		dataType: "JSON",
 		success: function (data) {
@@ -115,7 +112,7 @@ function hapusAja(nrp) {
 	$("#hapus-poltabes-modal").modal("show");
 	$("#konfirmasi_hapus_modal").click(function () {
 		$.ajax({
-			url: url_urmin + "hapus_Pol",
+			url: urlUrmin + "hapusPol",
 			type: "POST",
 			dataType: "JSON",
 			data: {
@@ -132,18 +129,18 @@ function hapusAja(nrp) {
 	});
 }
 
-function update_Poltabes() {
-	if ($("#poltabes_nama").val() == '') {
+function updatePoltabes() {
+	if ($("#poltabes_nama").val() === "") {
 		alert("Isi Nama Personel!");
-	} else if ($("#poltabes_pkt").val() == '') {
+	} else if ($("#poltabes_pkt").val() === "") {
 		alert("Isi Pangkat!");
-	} else if ($("#poltabes_jab").val() == '') {
+	} else if ($("#poltabes_jab").val() === "") {
 		alert("Isi Jabatan");
-	} else if ($("#poltabes_tmt").val() == '') {
-		alert("Isi Tmt Jab")
+	} else if ($("#poltabes_tmt").val() === "") {
+		alert("Isi Tmt Jab");
 	} else {
 		$.ajax({
-			url: url_urmin + "update_Poltabes",
+			url: urlUrmin + "updatePoltabes",
 			type: "POST",
 			dataType: "JSON",
 			data: {
@@ -152,16 +149,14 @@ function update_Poltabes() {
 				pkt: $("#poltabes_pkt").val(),
 				jab: $("#poltabes_jab").val(),
 				tempat: $("#poltabes_tmpt").val(),
-				tgl_lahir: $("#poltabes_tgl").val(),
+				tglLahir: $("#poltabes_tgl").val(),
 				suku: $("#poltabes_suku").val(),
-				tmt_jab: $("#poltabes_tmt").val(),
-				id_instansi: $("#poltabes_instansi").val(),
-				id_bagian: $("#poltabes_bagian").val()
+				tmtJab: $("#poltabes_tmt").val(),
+				idInstansi: $("#poltabes_instansi").val(),
+				idBagian: $("#poltabes_bagian").val()
 			},
 			success: function () {
 				alert("Data Berhasil Diubah!");
-				// window.location.reload();
-				// history.go(0);
 				tabelperBagian();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -169,56 +164,30 @@ function update_Poltabes() {
 			}
 		});
 	}
-	// $.ajax({
-	// 	url: url_urmin + "update_Poltabes",
-	// 	type: "POST",
-	// 	dataType: "JSON",
-	// 	data: {
-	// 		nama: $("#poltabes_nama").val(),
-	// 		nrp: $("#poltabes_nrp").val(),
-	// 		pkt: $("#poltabes_pkt").val(),
-	// 		jab: $("#poltabes_jab").val(),
-	// 		tempat: $("#poltabes_tmpt").val(),
-	// 		tgl_lahir: $("#poltabes_tgl").val(),
-	// 		suku: $("#poltabes_suku").val(),
-	// 		tmt_jab: $("#poltabes_tmt").val(),
-	// 		id_instansi: $("#poltabes_instansi").val(),
-	// 		id_bagian: $("#poltabes_bagian").val()
-	// 	},
-	// 	success: function () {
-	// 		alert("Data Berhasil Diubah!");
-	// 		// window.location.reload();
-	// 		// history.go(0);
-	// 		tabelperBagian();
-	// 	},
-	// 	error: function (jqXHR, textStatus, errorThrown) {
-	// 		alert("error!");
-	// 	}
-	// });
 }
 
 //get password dr nrp
-function get_nrpPass(nrp) {
+function getnrpPass(nrp) {
 	$("#reset-pass").modal("show");
-	$("#save_password").attr("onclick", "ganti_password(" + nrp + ")");
+	$("#save_password").attr("onclick", "gantipPassword(" + nrp + ")");
 }
 
 //ganti password urmin
-function ganti_password(nrp) {
-	if ($('#new_password').val() == '') {
-		alert("Password Baru Harus Diisi!")
+function gantipPassword(nrp) {
+	if ($("#new_password").val() === "") {
+		alert("Password Baru Harus Diisi!");
 	} else {
 		$.ajax({
-			url: url_urmin + "ganti_Password",
+			url: urlUrmin + "gantiPassword",
 			type: "POST",
 			dataType: "JSON",
 			data: {
 				nrp: nrp,
-				new_password: $("#new_password").val()
+				newPassword: $("#new_password").val()
 			},
 			success: function () {
 				alert("Password berhasil diubah!");
-				$('#new_password').val('')
+				$("#new_password").val("");
 
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -231,7 +200,7 @@ function ganti_password(nrp) {
 function tabelperBagian() {
 	$("#dataTable_wrapper").remove();
 	$.ajax({
-		url: url_urmin + "getPersonelBagian/" + $("#selectBagian").val(),
+		url: urlUrmin + "getPersonelBagian/" + $("#selectBagian").val(),
 		type: "GET",
 		dataType: "JSON",
 		success: function (data) {
@@ -239,10 +208,10 @@ function tabelperBagian() {
 			var no = 0;
 			// if (data) {
 			tabel +=
-				'<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0"><thead><tr><th>No</th><th>Nama</th><th>NRP</th><th>Jabatan</th><th width="60">Aksi</th></tr></thead><tbody style="text-transform: uppercase;">';
+				"<table class='table table-bordered' id='dataTable' width='100%' cellspacing='0'><thead><tr><th>No</th><th>Nama</th><th>NRP</th><th>Jabatan</th><th width='60'>Aksi</th></tr></thead><tbody style='text-transform: uppercase;'>";
 			for (var i = 0; i < Object.keys(data).length; i++) {
 				tabel +=
-					'<tr role="row" class="odd"><td>' +
+					"<tr role='row' class='odd'><td>" +
 					++no +
 					"</td><td>" +
 					data[i]["nama"] +
@@ -250,19 +219,19 @@ function tabelperBagian() {
 					data[i]["nrp"] +
 					"</td><td>" +
 					data[i]["jabatan"] +
-					'</td><td>';
-				if (data[i]["level"] == "personel") {
+					"</td><td>";
+				if (data[i]["level"] === "personel") {
 					var string = "'" + data[i]["nrp"] + "'";
 					tabel +=
-						'<button type="button" class="badge badge-info" id="detail_poltabes_button" onclick="detailPoltabes(' +
+						"<button type='button' class='badge badge-info' id='detail_poltabes_button' onclick='detailPoltabes(" +
 						string +
-						')"><i class="fas fa-fw fa-edit"></i></button><button type = "submit" class="badge badge-success" onclick = "get_nrpPass(' +
+						")'><i class='fas fa-fw fa-edit'></i></button><button type = 'submit' class='badge badge-success' onclick = 'getnrpPass(" +
 						string +
-						')" > <i class="fas fa-fw fa-key"></i></button><button type="submit" class="badge badge-danger" id="hapus" onclick="hapusAja(' +
+						")' > <i class='fas fa-fw fa-key'></i></button><button type='submit' class='badge badge-danger' id='hapus' onclick='hapusAja(" +
 						string +
-						')"><i class="fas fa-fw fa-trash"></i></button><a target= "_blank" href="http://localhost/restabes-jateng/personel/pdf_profil/' +
+						")'><i class='fas fa-fw fa-trash'></i></button><a target= '_blank' href='http://localhost/restabes-jateng/personel/pdf_profil/" +
 						data[i]["nrp"] +
-						'"><button type="button" class="badge badge-warning"><i class="fas fa-fw fa-print"></i></button></a>';
+						"'><button type='button' class='badge badge-warning'><i class='fas fa-fw fa-print'></i></button></a>";
 				}
 			}
 			tabel += "</tbody></table>";
